@@ -10,13 +10,10 @@ app.use(express.json());
 const PORT = process.env.PORT || 3001;
 
 // MongoDB connection
-const mongoURI = "mongodb://localhost:27017"; // Replace with your actual connection string
+const mongoURI = "mongodb://localhost:27017/beans"; // Replace with your actual connection string
 
 mongoose
-  .connect(mongoURI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+  .connect(mongoURI)
   .then(() => {
     console.log("MongoDB connected successfully.");
   })
