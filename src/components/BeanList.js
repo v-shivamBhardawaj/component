@@ -10,7 +10,7 @@ const BeanList = () => {
     const fetchBeans = async () => {
       try {
         // Make sure the endpoint matches your Express API
-        const response = await axios.get("http://localhost:3000/api/users"); // Change the URL if your server is hosted elsewhere
+        const response = await axios.get("http://localhost:3001/api/users"); // Change the URL if your server is hosted elsewhere
         setBeans(response.data);
       } catch (err) {
         setError("Failed to fetch beans");
@@ -25,6 +25,19 @@ const BeanList = () => {
   if (loading) return <div>Loading....</div>;
   if (error) return <div>{error}</div>;
 
+  const addToCart = async (bean) => {
+    try {
+      await axios.post("http://localhost:3001/api/cart", {
+        beanId: bean.beanId,
+        flavorName: bean.flavorName,
+      });
+      alert(`${bean.flavorName} added to cart!`);
+    } catch (err) {
+      console.error(err);
+      alert("Failed to add to cart");
+    }
+  };
+
   return (
     <ul style={{ listStyleType: "none", padding: 0 }}>
       {beans.map((bean) => (
@@ -38,6 +51,11 @@ const BeanList = () => {
             textAlign: "left",
           }}
         >
+          <img
+            src={bean.imageUrl}
+            alt={bean.flavorName}
+            style={{ width: "100px", height: "100px" }}
+          />
           <h3>{bean.flavorName}</h3>
           <p>{bean.description}</p>
           <p>
@@ -55,11 +73,7 @@ const BeanList = () => {
           <p>
             <strong>Kosher:</strong> {bean.kosher ? "Yes" : "No"}
           </p>
-          <img
-            src={bean.imageUrl}
-            alt={bean.flavorName}
-            style={{ width: "100px", height: "100px" }}
-          />
+          <button onClick={() => addToCart(bean)}>Add to Cart</button>
         </li>
       ))}
     </ul>
